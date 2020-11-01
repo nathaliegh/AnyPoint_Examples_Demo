@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--  service that will repeat on specific time interval , passing a specific parameter for it -->
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	
+	<configuration-properties doc:name="Configuration properties" doc:id="ac7f81a0-facd-4cb2-87e1-28a126dbec76" file="local.properties" />
+	<flow name="intervalTestFlow1" doc:id="920c92fa-0460-4d89-be93-1ac943d81d7d" >
+		<scheduler doc:name="Scheduler" doc:id="3674d043-3851-4bf5-9468-57878bf59072" >
+			<scheduling-strategy >
+				<fixed-frequency frequency="${intervalTime}" timeUnit="SECONDS"/>
+			</scheduling-strategy>
+		</scheduler>
+		<logger level="INFO" doc:name="Logger" doc:id="cbc4ede8-4a1a-4eb0-904e-a12d237e6600" message='#[now() as String {format :"dd_MMM_YYYY HH:mm:ss"}]'/>
+	</flow>
+	
+	</mule>

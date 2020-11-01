@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  Read data file 1 and write to file 2 -->
+<mule xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="a93d4274-83f2-4d8f-8561-3004f22340e6" >
+		<http:listener-connection host="localhost" port="8081" />
+	</http:listener-config>
+	<file:config name="File_Config" doc:name="File Config" doc:id="b466680a-07a9-4b8e-8202-dccc7505b7c7" />
+	<flow name="filetestFlow" doc:id="81f9f540-92cf-42b1-a9b3-7acfd3b1fd77" >
+		<http:listener doc:name="Listener" doc:id="ff71dd63-0257-419c-944b-9938e278d5a5" config-ref="HTTP_Listener_config" path="/getData"/>
+		<file:copy doc:name="Copy" doc:id="6924ce55-8080-4651-bbe3-3285bf4dafb4" config-ref="File_Config" sourcePath="/Users/user/Desktop/LystFile" targetPath="/Users/user/Documents/LystFile" overwrite="true"/>
+		<file:write doc:name="Write" doc:id="1966177f-3874-467c-80de-7592d9601cee" config-ref="File_Config" path="/Users/user/Desktop/LystFile/Untitled.txt">
+			<file:content ><![CDATA[#[attributes.queryParams.data]]]></file:content>
+		</file:write>
+		<set-payload value="#[attributes.queryParams.data]" doc:name="Set Payload" doc:id="9f355d92-3108-4b60-b10c-391ce36fb282" />
+		<logger level="INFO" doc:name="Logger" doc:id="bbe7b899-437e-45f9-a623-0d8814214382" message="Lyst message #[attributes.queryParams.data]"/>
+	</flow>
+</mule>

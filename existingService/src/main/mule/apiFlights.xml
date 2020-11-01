@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- service that's call an existing web service -->
+<mule xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="8905e13e-753e-45fb-9c44-b81ebfa0473c" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="cb0e2283-ed38-430e-9130-7b8f07e34cc3">
+		<http:request-connection host="training-american-ws.cloudhub.io"/>
+	</http:request-config>
+	<http:request-config name="HTTP_Request_configuration1" doc:name="HTTP Request configuration" doc:id="a2f494c3-944c-4bb3-a383-33f1b1440b0e" >
+		<http:request-connection host="localhost" port="8081" />
+	</http:request-config>
+	<file:config name="File_Config" doc:name="File Config" doc:id="b73edce5-0948-4c09-84f4-eb0abacaa87a" />
+	<flow name="hello_world_appFlow2" doc:id="94d454d1-d625-43a3-abd0-ffb92652c29c" >
+		<http:listener doc:name="Listener" doc:id="c697b271-3ba6-4115-8c36-933a6a4649e1" config-ref="HTTP_Listener_config" path="/getFlightsByDestination"/>
+		<logger level="INFO" doc:name="Logger" doc:id="9c296b9e-657f-457f-b0a9-9b46b7882aba" message="destination #[attributes.queryParams.destination]"/>
+		<http:request method="GET" doc:name="Request" doc:id="efee4ecb-986b-47af-9548-46b62bae5a14" config-ref="HTTP_Request_configuration" path="/api/flights">
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	destination : attributes.queryParams.destination
+}]]]></http:query-params>
+		</http:request>
+	</flow>
+	<flow name="hello_world_appFlow1" doc:id="48dd4f38-90c5-489a-ac7b-4a4378bef8a4" >
+		<http:listener doc:name="Listener" doc:id="5743af95-7718-4475-a454-854a84c2a103" config-ref="HTTP_Listener_config" path="/getFlights"/>
+		<http:request method="GET" doc:name="Request" doc:id="d5583f1b-6bb2-4b4b-ac0f-7922298dad80" config-ref="HTTP_Request_configuration" path="/api/flights"/>
+	</flow>
+</mule>

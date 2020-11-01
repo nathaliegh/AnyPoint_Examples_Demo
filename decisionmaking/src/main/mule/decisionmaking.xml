@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- service that's will have a decision making based on input method name -->
+<mule xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="d98124a2-dcd5-4822-9d51-ffd0398f1894" >
+		<http:listener-connection host="localhost" port="8081" />
+	</http:listener-config>
+	<flow name="decisionmakingFlow" doc:id="8fe6d4ff-8e38-4519-aae6-81015a5ecc99" >
+		<http:listener doc:name="Listener" doc:id="9798c62c-fc68-4f8f-83b5-801250a8d736" config-ref="HTTP_Listener_config" path="/decision"/>
+		<set-variable value="#[attributes.method]" doc:name="Set Variable" doc:id="d1c39a3b-08f7-47e2-9f7d-b39139993b46" variableName="method"/>
+		<logger level="INFO" doc:name="Logger" doc:id="c78f560f-81e0-4017-854a-f86e838f0d1d" message="#[attributes.method]"/>
+		<choice doc:name="Choice" doc:id="9629a47a-f985-4e73-a71b-d3ec2e018e13" >
+			<when expression="#[attributes.method == 'GET']">
+				<logger level="INFO" doc:name="LoggerGET" doc:id="8b13be7a-489f-42de-ad0d-d4ec4f1a3f3f" message="LYST GET"/>
+			</when>
+			<when expression="#[attributes.method == 'POST']">
+				<logger level="INFO" doc:name="LoggerPOST" doc:id="efd0b867-7510-4912-8abd-39da022e3a0b" message="LYST POST"/>
+			</when>
+				<when expression="#[attributes.method == 'PUT']">
+				<logger level="INFO" doc:name="LoggerPUT" doc:id="f82f1a90-6e79-4de8-af1a-03d88f15ade5" message="LYST PUT"/>
+			</when>
+			<when expression="#[attributes.method == 'DELETE']">
+				<logger level="INFO" doc:name="LoggerDELETE" doc:id="d79e8b9b-7e80-4aa4-b87d-642f8a9b72b3" message="LYST DELETE"/>
+			</when>
+			<otherwise >
+				<logger level="INFO" doc:name="Logger" doc:id="69600992-2018-4b2e-b2a7-b3194e8d366d" message="LYST Other method"/>
+			</otherwise>
+		</choice>
+		<set-payload value="#[attributes.method]" doc:name="Set Payload" doc:id="b2ae9b85-3294-4fac-bb96-b3d073f6c280" />
+
+	</flow>
+</mule>

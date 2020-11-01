@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- change service from http to https -->
+<mule xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="16b41807-3f5a-4591-91ee-e572942f83b4" >
+		<http:listener-connection host="localhost" port="8081" protocol="HTTPS">
+			<tls:context >
+				<tls:key-store type="pkcs12" path="/Users/user/Documents/Certificates.p12" keyPassword="password" password="password" />
+			</tls:context>
+		</http:listener-connection>
+	</http:listener-config>
+	<flow name="testFlow" doc:id="a13affdd-fee6-4c0f-a381-b10a5ca1c8f6" >
+		<http:listener doc:name="Listener" doc:id="04d35f09-ed60-4628-9130-f02f71f8ec12" config-ref="HTTP_Listener_config" path="/security"/>
+		<logger level="INFO" doc:name="Logger" doc:id="d9bf4c3d-78aa-4a34-9429-c8359164f571" message="** my flow has been invoked **"/>
+	</flow>
+</mule>
